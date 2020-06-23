@@ -5,8 +5,8 @@
 template <typename T>
 class Vector {
 public:
-    Vector();
-    Vector(size_t n, T &val);
+    explicit Vector();
+    explicit Vector(size_t n, T val);
     Vector(const Vector& x);
     Vector& operator= (const Vector& x);
     ~Vector();
@@ -32,6 +32,7 @@ public:
     void insert(size_t position,T& val,size_t n=1);
     void erase(T* position);
     void clear();
+    void swap (Vector & other);
 private:
     T* ptr;
     size_t m_size;
@@ -42,7 +43,7 @@ template <typename T>
 Vector<T>::Vector() :ptr(NULL), m_size(0), m_capacity(0) {}
 
 template <typename T>
-Vector<T>::Vector(size_t n, T& val) : ptr(NULL),m_size(n),m_capacity(n)
+Vector<T>::Vector(size_t n, T val) : ptr(NULL),m_size(n),m_capacity(n)
 {
     size_t i;
     ptr = new T[n];
@@ -299,4 +300,10 @@ void Vector<T>::erase(T *position) {
         ptr[i]=ptr[i]-1;
     }
     m_size--;
+}
+template <typename T>
+void Vector<T>::swap(Vector &other) {
+  Vector tmp(*this);
+  *this = other;
+  other = tmp;
 }
