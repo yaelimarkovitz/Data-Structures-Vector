@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cmath>
+#include <exception>
 template <typename T>
 class Vector{
 public:
@@ -16,7 +17,10 @@ public:
     void reserve(size_t new_n);
     T&operator[](size_t index);
     const T&operator[](size_t index)const;
-
+    T& at(size_t index);
+    const T& at(size_t index) const ;
+    T& front() ;
+    const T& front()const;
 private:
     Vector& init(Vector & v,size_t size);
     T* m_vec;
@@ -113,4 +117,27 @@ T& Vector<T>::operator[](size_t index) {
 template <typename T>
 const T& Vector<T>::operator[](size_t index) const {
     return m_vec[index];
+}
+template <typename T>
+const T& Vector<T>::at(size_t index) const {
+    if(index>m_size){
+        throw std::out_of_range("sorry");
+    }
+    return m_vec[index];
+}
+template <typename T>
+T& Vector<T>::at(size_t index) {
+    if(index>m_size){
+
+        throw std::out_of_range("sorry");
+    }
+    return m_vec[index];
+}
+template <typename T>
+T& Vector<T>::front() {
+    return m_vec[0];
+}
+template <typename T>
+const T& Vector<T>::front() const {
+    return m_vec[0];
 }
