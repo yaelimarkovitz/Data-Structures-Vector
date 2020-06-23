@@ -6,13 +6,13 @@ template <typename T>
 class Vector {
 public:
     Vector();
-    Vector(size_t n, T val = 0);
+    Vector(size_t n, T &val);
     Vector(const Vector& x);
     Vector& operator= (const Vector& x);
     ~Vector();
-    size_t size(const Vector&) const;
-    size_t capacity(const Vector&) const;
-    size_t max_size(const Vector&) const;
+    size_t size() const;
+    size_t capacity() const;
+    size_t max_size() const;
     bool empty(const Vector&) const;
     void resize(size_t n, T val = 0);
     void reserve(T n);
@@ -30,6 +30,7 @@ public:
     void push_back(T& val);
     void pop_back();
     void insert(size_t position,T& val,size_t n=1);
+    void erase(T* position);
     void clear();
 private:
     T* ptr;
@@ -41,7 +42,7 @@ template <typename T>
 Vector<T>::Vector() :ptr(NULL), m_size(0), m_capacity(0) {}
 
 template <typename T>
-Vector<T>::Vector(size_t n, T val) : ptr(NULL)
+Vector<T>::Vector(size_t n, T& val) : ptr(NULL),m_size(n),m_capacity(n)
 {
     size_t i;
     ptr = new T[n];
@@ -49,12 +50,10 @@ Vector<T>::Vector(size_t n, T val) : ptr(NULL)
     {
         ptr[i] = val;
     }
-    m_size = n;
-    m_capacity = n;
 }
 
 template <typename T>
-Vector<T>::Vector(const Vector<T>& x) :ptr(NULL)
+Vector<T>::Vector(const Vector<T>& x) :ptr(NULL),m_size(x.size()),m_capacity(x.capacity())
 {
     int i;
     ptr = new T[x.m_size];
@@ -62,8 +61,6 @@ Vector<T>::Vector(const Vector<T>& x) :ptr(NULL)
     {
         ptr[i] = x.ptr[i];
     }
-    m_size = x.m_size;
-    m_capacity = x.m_capacity;
 }
 
 template <typename T>
@@ -74,13 +71,13 @@ Vector<T>::~Vector()
 }
 
 template <typename T>
-size_t Vector<T>::size(const Vector& x) const
+size_t Vector<T>::size() const
 {
-    return x.m_size;
+    return m_size;
 }
 
 template <typename T>
-size_t Vector<T>::max_size(const Vector& x) const
+size_t Vector<T>::max_size() const
 {
     return std::numeric_limits<size_t>::max();
 }
@@ -154,7 +151,7 @@ void Vector<T>::resize(size_t n, T val)
 }
 
 template <typename T>
-size_t Vector<T>::capacity(const Vector& x) const
+size_t Vector<T>::capacity() const
 {
     return m_capacity;
 }
@@ -294,4 +291,12 @@ void Vector<T>::clear() {
         pop_back();
     }
     m_size=0;
+}
+template <typename T>
+void Vector<T>::erase(T *position) {
+    position.~T();
+    for (int i = position+1; i < ptr+m_size ; ++i) {
+        ptr[i]=ptr[i]-1;
+    }
+    m_size--;
 }
