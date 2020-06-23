@@ -29,6 +29,8 @@ public:
     const T* data() const;
     void push_back(T& val);
     void pop_back();
+    void insert(size_t position,T& val,size_t n=1);
+    void clear();
 private:
     T* ptr;
     size_t m_size;
@@ -270,5 +272,26 @@ void Vector<T>::push_back(T &val) {
 }
 template <typename T>
 void Vector<T>::pop_back() {
+    ptr[m_size].~T();
     m_size-=1;
+
+}
+template <typename T>
+void Vector<T>::insert(size_t position, T &val, size_t n) {
+    if(m_size+n>m_capacity){
+        reserve(m_size+n);
+    }
+    for (int i = m_size; i > position; --i) {
+        ptr[i+n]=ptr[i];
+    }
+    for (int j = position; j < position+n; ++j) {
+        ptr[j]=val;
+    }
+}
+template <typename T>
+void Vector<T>::clear() {
+    for (int i = m_size; i >0; --i) {
+        pop_back();
+    }
+    m_size=0;
 }
