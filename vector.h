@@ -9,8 +9,13 @@ public:
     ~Vector();
     Vector& operator=(const Vector& v);
     size_t size() const;
-    size_t max_size() const;
+    static size_t max_size();
+    void resize(size_t new_size,T value);
     size_t capacity() const;
+    bool empty() const;
+    void reserve(size_t new_n);
+    T&operator[](size_t index);
+    const T&operator[](size_t index)const;
 
 private:
     Vector& init(Vector & v,size_t size);
@@ -66,11 +71,46 @@ size_t Vector<T>::size() const {
     return m_size;
 }
 template <typename T>
-size_t Vector<T>::max_size() const {
+size_t Vector<T>::max_size() {
     return (pow(2, sizeof(T)))-1;
 }
 template <typename T>
 size_t Vector<T>::capacity() const {
     return m_capacity;
 }
-
+template <typename T>
+void Vector<T>::resize(size_t new_size ,T value) {
+    if(new_size<size){
+        for (int i = 0; i <m_size-new_size ; ++i)
+            m_vec.pop();
+    }
+    else{
+        for (int i = 0; i < new_size-m_size; ++i) {
+            m_vec.push_back(value);
+        }
+    }
+}
+template <typename T>
+bool Vector<T>::empty() const {
+    return (size==0);
+}
+template <typename T>
+void Vector<T>::reserve(size_t new_n) {
+    if(new_n<size()){
+        T* orig = m_vec;
+        m_vec=new T [new_n];
+        for (int i = 0; i <size() ; ++i) {
+            m_vec[i]=orig[i];
+        }
+        delete []orig;
+        orig=NULL;
+    }
+}
+template <typename T>
+T& Vector<T>::operator[](size_t index) {
+    return m_vec[index];
+}
+template <typename T>
+const T& Vector<T>::operator[](size_t index) const {
+    return m_vec[index];
+}
