@@ -13,7 +13,7 @@ public:
     size_t size() const;
     size_t capacity() const;
     size_t max_size() const;
-    bool empty(const Vector&) const;
+    bool empty() const;
     void resize(size_t n, T val = 0);
     void reserve(T n);
     T& operator[] (size_t n);
@@ -158,9 +158,9 @@ size_t Vector<T>::capacity() const
 }
 
 template <typename T>
-bool Vector<T>::empty(const Vector& x) const
+bool Vector<T>::empty() const
 {
-    return x.m_size == 0;
+    return m_size == 0;
 }
 
 template <typename T>
@@ -285,6 +285,7 @@ void Vector<T>::insert(size_t position, T &val, size_t n) {
     for (int j = position; j < position+n; ++j) {
         ptr[j]=val;
     }
+    m_size+=n;
 }
 template <typename T>
 void Vector<T>::clear() {
