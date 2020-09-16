@@ -1,49 +1,81 @@
 #include <iostream>
-#include <exception>
 #include <limits>
+#include <cassert>
 
 template <typename T>
 class Vector {
+
 public:
+
+    class iterator{
+
+    public:
+        iterator(T* ptr):m_ptr(ptr){}
+        iterator operator++()
+        {
+            iterator i =*this;
+            m_ptr++;
+            return i;
+        }
+        iterator operator++(int of){m_ptr++;
+            return *this;}
+            T& operator*(){ return *m_ptr;}
+            bool operator==(iterator& other){return *m_ptr==other.m_ptr;}
+            bool operator!=(iterator& other){return *m_ptr!=other.m_ptr;}
+    private:
+
+        T* m_ptr;
+    };
+
     explicit Vector();
-    explicit Vector(size_t n, T val);
-    Vector(const Vector& x);
-    Vector& operator= (const Vector& x);
+    explicit Vector(size_t n,  const T &val=T());
     ~Vector();
-    size_t size() const;
-    size_t capacity() const;
-    size_t max_size() const;
-    bool empty() const;
-    void resize(size_t n, T val = 0);
-    void reserve(T n);
-    T& operator[] (size_t n);
-    const T& operator[] (size_t n) const;
-    void assign(size_t n, const T& val);
-    T& at(size_t n);
-    const T& at(size_t n) const;
-    T& front();
-    const T& front() const;
-    T& back();
-    const T& back() const;
-    T* data();
-    const T* data() const;
-    void push_back(T& val);
-    void pop_back();
-    void insert(size_t position,T& val,size_t n=1);
-    void erase(T* position);
-    void clear();
-    void swap (Vector & other);
+    Vector(const Vector& x);
+
+    Vector&     operator= (const Vector& x);
+    size_t      size() const;
+    size_t      capacity() const;
+    size_t      max_size() const;
+    bool        empty() const;
+    void        resize(size_t n, T val = T());
+    void        reserve(T n);
+    T&          operator[] (size_t n);
+    const T&    operator[] (size_t n) const;
+    void        assign(size_t n, const T& val);
+    T&          at(size_t n);
+    const T&    at(size_t n) const;
+    T&          front();
+    const T&    front() const;
+    T&          back();
+    const T&    back() const;
+    T*          data();
+    const T*    data() const;
+    void        push_back(T& val);
+    void        pop_back();
+    void        insert(size_t position,T& val,size_t n=1);
+    void        erase(T* position);
+    void        clear();
+    void        swap (Vector & other);
+    iterator    begin()
+    {
+        return iterator(ptr);
+    }
+    iterator    end()
+    {
+        return ptr+m_size;
+    }
+
 private:
-    T* ptr;
-    size_t m_size;
-    size_t m_capacity;
+    T*      ptr;
+    size_t  m_size;
+    size_t  m_capacity;
 };
 
 template <typename T>
 Vector<T>::Vector() :ptr(NULL), m_size(0), m_capacity(0) {}
 
 template <typename T>
-Vector<T>::Vector(size_t n, T val) : ptr(NULL),m_size(n),m_capacity(n)
+Vector<T>::Vector(size_t n,const T &val) : ptr(NULL),m_size(n),m_capacity(n)
 {
     size_t i;
     ptr = new T[n];
@@ -176,8 +208,6 @@ void Vector<T>::reserve(T n)
         tmp[i] = ptr[i];
     }
     ptr = tmp;
-//    for (i = m_size; i < size; i++)
-//        ptr[i] = 0;
     m_capacity = size;
 }
 
@@ -308,3 +338,14 @@ void Vector<T>::swap(Vector &other) {
   *this = other;
   other = tmp;
 }
+//template <typename T>
+//Vector<T>::iterator Vector<T>::iterator::operator++() {
+//    iterator i =*this;
+//    m_ptr++;
+//    return i;
+//}
+//Vector<T>::iterator::operator++() {
+//    iterator i =*this;
+//    m_ptr++;
+//    return i;
+//}
